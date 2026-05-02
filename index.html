@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <title>Lifeflow — Your Inner Workspace</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet"/>
+
+  <!-- App Styles -->
+  <link rel="stylesheet" href="style.css"/>
+  <link rel="stylesheet" href="mobile.css"/>
+  <link rel="stylesheet" href="settings.css"/>
+  <link rel="stylesheet" href="theme-fixes.css"/>
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+</head>
+<body>
+<!-- ── AMBIENT BACKGROUND ── -->
+<div class="ambient-orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="orb orb-4"></div>
+</div>
+<div class="ambient-grain"></div>
+<!-- ══════════════════════════════════════════
+     SIDEBAR
+══════════════════════════════════════════ -->
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-name">Lifeflow</div>
+    <div class="logo-sub">Your Inner Workspace</div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <div class="nav-section-label">Main</div>
+    <div class="nav-item active" onclick="switchTo('dashboard',this)" id="nav-dashboard">
+      <span class="nav-icon"><i data-lucide="layout-dashboard"></i></span> Dashboard
+    </div>
+    <div class="nav-item" onclick="switchTo('notes',this)" id="nav-notes">
+      <span class="nav-icon"><i data-lucide="pencil-line"></i></span> Notes
+      <span class="nav-badge" id="notes-badge">0</span>
+    </div>
+    <div class="nav-item" onclick="switchTo('calendar',this)" id="nav-calendar">
+      <span class="nav-icon"><i data-lucide="calendar-days"></i></span> Calendar
+    </div>
+    <div class="nav-item" onclick="switchTo('goals',this)" id="nav-goals">
+      <span class="nav-icon"><i data-lucide="target"></i></span> Goals
+    </div>
+    <div class="nav-section-label">Tools</div>
+    <div class="nav-item" onclick="switchTo('focus',this)" id="nav-focus">
+      <span class="nav-icon"><i data-lucide="timer"></i></span> Focus
+    </div>
+    <div class="nav-item" onclick="switchTo('reminders',this)" id="nav-reminders">
+      <span class="nav-icon"><i data-lucide="bell"></i></span> Reminders
+      <span class="nav-badge" id="rem-badge" style="display:none">0</span>
+    </div>
+    <div class="nav-section-label">System</div>
+    <div class="nav-item" onclick="switchTo('settings',this)" id="nav-settings">
+      <span class="nav-icon"><i data-lucide="settings"></i></span> Settings
+    </div>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="user-info">
+      <div class="user-avatar" id="user-avatar">E</div>
+      <div>
+        <div class="user-name" id="user-name-display">Eduard</div>
+        <div class="user-sub">Free plan</div>
+      </div>
+    </div>
+    <button class="btn-signout" id="btn-signout" onclick="handleSignOut()">Sign out</button>
+  </div>
+</aside>
+
+
+<!-- ══════════════════════════════════════════
+     MAIN CONTENT AREA
+══════════════════════════════════════════ -->
+<main class="main" id="main-scroll">
+
+  <!-- ── DASHBOARD ── -->
+  <div class="panel active" id="panel-dashboard">
+    <div class="page-header">
+      <div class="page-label" id="dash-date-label">FRIDAY, MAY 1</div>
+      <div class="page-title" style="font-family:'DM Serif Display',serif;" id="dash-greeting">Good to see you, Eduard</div>
+    </div>
+    <div class="page-content">
+
+      <!-- Quote banner -->
+      <div class="quote-banner" id="quote-banner">
+        <div class="quote-icon"><i data-lucide="sparkles"></i></div>
+        <div>
+          <div class="quote-text" id="quote-text">The secret of getting ahead is getting started.</div>
+          <div class="quote-author" id="quote-author">— Mark Twain</div>
+        </div>
+      </div>
+
+      <!-- Streak widget -->
+      <div class="streak-widget">
+        <div class="streak-flame"><i data-lucide="flame"></i></div>
+        <div class="streak-info">
+          <div class="streak-label">Daily Streak</div>
+          <div class="streak-count" id="streak-count">1 day</div>
+          <div class="streak-sub">Keep it going!</div>
+        </div>
+        <div class="streak-dots" id="streak-dots">
+          <div class="streak-dot active"></div>
+          <div class="streak-dot"></div>
+          <div class="streak-dot"></div>
+          <div class="streak-dot"></div>
+          <div class="streak-dot"></div>
+          <div class="streak-dot"></div>
+          <div class="streak-dot"></div>
+        </div>
+      </div>
+
+      <!-- Stats row -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-label">Notes</div>
+          <div class="stat-value" id="stat-notes">0</div>
+          <div class="stat-sub">entries created</div>
+          <div class="stat-icon"><i data-lucide="pencil-line"></i></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Goals</div>
+          <div class="stat-value" id="stat-goals">0</div>
+          <div class="stat-sub">in progress</div>
+          <div class="stat-icon"><i data-lucide="target"></i></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Events</div>
+          <div class="stat-value" id="stat-events">0</div>
+          <div class="stat-sub">upcoming</div>
+          <div class="stat-icon"><i data-lucide="calendar-days"></i></div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Focus Today</div>
+          <div class="stat-value" id="stat-focus">0<span class="stat-unit">min</span></div>
+          <div class="stat-sub" id="stat-focus-sessions">0 sessions</div>
+          <div class="stat-icon"><i data-lucide="timer"></i></div>
+        </div>
+      </div>
+
+      <!-- Quick actions -->
+      <div class="quick-actions">
+        <button class="quick-btn" onclick="openNoteModal()"><i data-lucide="pencil-line"></i> New note</button>
+        <button class="quick-btn" onclick="openGoalModal()"><i data-lucide="target"></i> New goal</button>
+        <button class="quick-btn" onclick="openCalModal(null)"><i data-lucide="calendar-plus"></i> Add event</button>
+        <button class="quick-btn" onclick="openReminderModal()"><i data-lucide="bell-plus"></i> Set reminder</button>
+        <button class="quick-btn" onclick="switchTo('focus',document.getElementById('nav-focus'))"><i data-lucide="timer"></i> Start focus</button>
+      </div>
+
+      <!-- Charts + Upcoming -->
+      <div class="dash-grid">
+        <div class="dash-card">
+          <div class="dash-card-title">
+            FOCUS THIS WEEK
+            <span id="sessions-count-label" style="color:var(--text-muted);font-size:11px;letter-spacing:0;text-transform:none;font-weight:400;">0 sessions</span>
+          </div>
+          <div style="font-family:'DM Serif Display',serif;font-size:28px;color:var(--text-primary);margin-bottom:14px;" id="weekly-focus-total">0 min</div>
+          <div class="mini-chart" id="mini-chart"></div>
+          <div style="display:flex;justify-content:space-between;margin-top:8px;" id="mini-chart-labels"></div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-title">
+            UPCOMING
+            <span class="dash-card-link" onclick="switchTo('reminders',document.getElementById('nav-reminders'))">View all ›</span>
+          </div>
+          <div id="dash-upcoming"></div>
+        </div>
+      </div>
+
+      <!-- Goals overview -->
+      <div class="dash-card" style="margin-bottom:20px;">
+        <div class="dash-card-title">
+          GOALS OVERVIEW
+          <span class="dash-card-link" onclick="switchTo('goals',document.getElementById('nav-goals'))">View all ›</span>
+        </div>
+        <div id="dash-goals-preview" style="display:flex;flex-direction:column;gap:12px;"></div>
+      </div>
+
+    </div>
+  </div><!-- /panel-dashboard -->
+
+
+  <!-- ── NOTES ── -->
+  <div class="panel" id="panel-notes">
+    <div class="page-header">
+      <div class="page-label">YOUR JOTTED THOUGHTS</div>
+      <div class="page-title" id="notes-panel-title">Notes</div>
+      <div class="page-actions">
+        <button class="btn-primary" onclick="openNoteModal()">+ New note</button>
+      </div>
+    </div>
+    <div class="page-content">
+      <div class="filter-row">
+        <button class="filter-btn active" onclick="filterNotes('all',this)">All</button>
+        <button class="filter-btn" onclick="filterNotes('idea',this)"><i data-lucide="lightbulb"></i> Idea</button>
+        <button class="filter-btn" onclick="filterNotes('recipe',this)"><i data-lucide="utensils"></i> Recipe</button>
+        <button class="filter-btn" onclick="filterNotes('schedule',this)"><i data-lucide="calendar"></i> Schedule</button>
+        <button class="filter-btn" onclick="filterNotes('list',this)"><i data-lucide="list-checks"></i> List</button>
+        <div class="search-wrap">
+          <span class="search-icon"><i data-lucide="search"></i></span>
+          <input type="text" class="search-bar" placeholder="Search..." oninput="searchNotes(this.value)" id="note-search"/>
+        </div>
+      </div>
+      <div class="notes-grid" id="notes-grid"></div>
+      <div class="empty-state" id="empty-notes" style="display:none;">
+        <div class="empty-icon"><i data-lucide="pencil-line"></i></div>
+        <div class="empty-text">Nothing here yet. Start with a thought.</div>
+      </div>
+    </div>
+  </div><!-- /panel-notes -->
+
+
+  <!-- ── CALENDAR ── -->
+  <div class="panel" id="panel-calendar">
+    <div class="page-header">
+      <div class="page-label">YOUR RHYTHM</div>
+      <div class="page-title">Calendar</div>
+      <div class="page-actions">
+        <button class="btn-primary" onclick="openCalModal(null)">+ Add event</button>
+      </div>
+    </div>
+    <div class="page-content">
+      <div class="cal-top">
+        <button class="cal-nav-btn" onclick="changeMonth(-1)">‹</button>
+        <button class="cal-nav-btn" onclick="changeMonth(1)">›</button>
+        <span class="cal-month-title" id="cal-month-label">May 2026</span>
+        <button class="cal-today-btn" onclick="goToday()">Today</button>
+      </div>
+      <div class="cal-grid-wrap">
+        <div class="cal-head-row" id="cal-head"></div>
+        <div class="cal-body" id="cal-body"></div>
+      </div>
+      <div class="event-list-section">
+        <div class="event-list-title">Upcoming events</div>
+        <div id="event-list"></div>
+      </div>
+    </div>
+  </div><!-- /panel-calendar -->
+
+
+  <!-- ── GOALS ── -->
+  <div class="panel" id="panel-goals">
+    <div class="page-header">
+      <div class="page-label">YOUR AMBITIONS</div>
+      <div class="page-title">Goals</div>
+      <div class="page-actions">
+        <button class="btn-primary" onclick="openGoalModal()">+ New goal</button>
+      </div>
+    </div>
+    <div class="page-content">
+      <div class="goals-grid" id="goals-grid"></div>
+      <div class="empty-state" id="empty-goals" style="display:none;">
+        <div class="empty-icon"><i data-lucide="target"></i></div>
+        <div class="empty-text">No goals yet. Dream big, start small.</div>
+      </div>
+    </div>
+  </div><!-- /panel-goals -->
+
+
+  <!-- ── FOCUS ── -->
+  <div class="panel" id="panel-focus">
+    <div class="page-header">
+      <div class="page-label">DEEP WORK, WITHOUT THE NOISE</div>
+      <div class="page-title">Focus</div>
+    </div>
+    <div style="padding-top:40px;">
+      <div class="focus-center">
+
+        <!-- Mode tabs -->
+        <div class="focus-tabs">
+          <button class="focus-tab active" onclick="setMode('focus',this)" id="tab-focus"><i data-lucide="zap"></i> Focus</button>
+          <button class="focus-tab" onclick="setMode('short',this)" id="tab-short"><i data-lucide="coffee"></i> Short break</button>
+          <button class="focus-tab" onclick="setMode('long',this)" id="tab-long"><i data-lucide="moon"></i> Long break</button>
+        </div>
+
+        <!-- Circular progress ring + timer -->
+        <div class="progress-ring-wrap">
+          <svg class="progress-ring" viewBox="0 0 260 260">
+            <circle class="ring-track" cx="130" cy="130" r="126"/>
+            <circle class="ring-fill"  cx="130" cy="130" r="126" id="ring-fill"/>
+          </svg>
+          <div class="ring-center">
+            <div class="timer-display" id="timer-display">25:00</div>
+          </div>
+        </div>
+
+        <!-- Task input -->
+        <input type="text" class="timer-task-input" id="timer-task" placeholder="What are you working on?"/>
+
+        <!-- Controls -->
+        <div class="timer-btns">
+          <button class="btn-start" id="btn-start" onclick="toggleTimer()"><i data-lucide="play"></i> Start</button>
+          <button class="btn-reset" onclick="resetTimer()"><i data-lucide="rotate-ccw"></i> Reset</button>
+        </div>
+
+        <!-- Duration slider -->
+        <div class="focus-duration-row">
+          <span>Duration</span>
+          <input type="range" class="duration-slider" id="duration-slider" min="5" max="90" value="25" oninput="setDuration(this.value)" step="5"/>
+          <span id="duration-label">25 minutes</span>
+        </div>
+
+        <!-- Today's sessions log -->
+        <div class="focus-sessions-today" id="sessions-section">
+          <div class="sessions-title">Today's sessions</div>
+          <div id="sessions-list"></div>
+          <div class="empty-state" id="empty-sessions" style="padding:30px 0;">
+            <div class="empty-text" style="font-size:13px;color:var(--text-muted);">No sessions yet. Start focusing!</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div><!-- /panel-focus -->
+
+
+  <!-- ── REMINDERS ── -->
+  <div class="panel" id="panel-reminders">
+    <div class="page-header">
+      <div class="page-label">STAY ON TRACK</div>
+      <div class="page-title">Reminders</div>
+      <div class="page-actions">
+        <button class="btn-primary" onclick="openReminderModal()">+ New reminder</button>
+      </div>
+    </div>
+    <div class="page-content">
+      <div class="reminders-layout">
+
+        <!-- List -->
+        <div>
+          <div style="font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--text-muted);font-weight:600;margin-bottom:12px;">ALL REMINDERS</div>
+          <div id="reminders-list"></div>
+          <div class="empty-state" id="empty-reminders" style="display:none;">
+            <div class="empty-icon"><i data-lucide="bell"></i></div>
+            <div class="empty-text">No upcoming reminders.</div>
+          </div>
+        </div>
+
+        <!-- Sidebar stats -->
+        <div>
+          <div class="reminders-sidebar">
+            <div class="rem-sidebar-title">OVERVIEW</div>
+            <div class="rem-stat-row">
+              <div class="rem-stat">
+                <div class="rem-stat-num" id="rem-total">0</div>
+                <div class="rem-stat-label">Total</div>
+              </div>
+              <div class="rem-stat">
+                <div class="rem-stat-num" id="rem-done-count">0</div>
+                <div class="rem-stat-label">Done</div>
+              </div>
+              <div class="rem-stat">
+                <div class="rem-stat-num" id="rem-pending">0</div>
+                <div class="rem-stat-label">Pending</div>
+              </div>
+            </div>
+            <div class="today-section-title">DUE TODAY</div>
+            <div id="rem-today-list">
+              <div style="font-size:12px;color:var(--text-muted);">Nothing due today.</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div><!-- /panel-reminders -->
+
+<div class="panel" id="panel-settings">
+  <div class="page-header">
+    <div class="page-label">PREFERENCES</div>
+    <div class="page-title">Settings</div>
+  </div>
+  <div class="page-content">
+
+    <!-- ── APPEARANCE ── -->
+    <div class="settings-section">
+      <div class="settings-section-title">Appearance</div>
+
+      <div class="theme-grid" id="theme-grid">
+
+        <!-- Warm Light (default) -->
+        <button class="theme-card active" data-theme="default" onclick="applyTheme('default',this)">
+          <div class="theme-preview tp-default">
+            <div class="tp-sidebar"></div>
+            <div class="tp-main">
+              <div class="tp-bar"></div>
+              <div class="tp-card"></div>
+              <div class="tp-card tp-card-sm"></div>
+            </div>
+          </div>
+          <div class="theme-name">Warm Light</div>
+          <div class="theme-desc">Original cream & oak</div>
+          <div class="theme-check">✓</div>
+        </button>
+
+        <!-- Dark Mode -->
+        <button class="theme-card" data-theme="dark" onclick="applyTheme('dark',this)">
+          <div class="theme-preview tp-dark">
+            <div class="tp-sidebar"></div>
+            <div class="tp-main">
+              <div class="tp-bar"></div>
+              <div class="tp-card"></div>
+              <div class="tp-card tp-card-sm"></div>
+            </div>
+          </div>
+          <div class="theme-name">Midnight</div>
+          <div class="theme-desc">Deep dark, easy on eyes</div>
+          <div class="theme-check">✓</div>
+        </button>
+
+        <!-- Neon -->
+        <button class="theme-card" data-theme="neon" onclick="applyTheme('neon',this)">
+          <div class="theme-preview tp-neon">
+            <div class="tp-sidebar"></div>
+            <div class="tp-main">
+              <div class="tp-bar"></div>
+              <div class="tp-card tp-neon-glow"></div>
+              <div class="tp-card tp-card-sm tp-neon-glow2"></div>
+            </div>
+          </div>
+          <div class="theme-name">Neon Pulse</div>
+          <div class="theme-desc">Cyberpunk glow & animation</div>
+          <div class="theme-check">✓</div>
+        </button>
+
+        <!-- Forest -->
+        <button class="theme-card" data-theme="forest" onclick="applyTheme('forest',this)">
+          <div class="theme-preview tp-forest">
+            <div class="tp-sidebar"></div>
+            <div class="tp-main">
+              <div class="tp-bar"></div>
+              <div class="tp-card"></div>
+              <div class="tp-card tp-card-sm"></div>
+            </div>
+          </div>
+          <div class="theme-name">Forest</div>
+          <div class="theme-desc">Muted greens & earth tones</div>
+          <div class="theme-check">✓</div>
+        </button>
+
+        <!-- Ocean -->
+        <button class="theme-card" data-theme="ocean" onclick="applyTheme('ocean',this)">
+          <div class="theme-preview tp-ocean">
+            <div class="tp-sidebar"></div>
+            <div class="tp-main">
+              <div class="tp-bar"></div>
+              <div class="tp-card"></div>
+              <div class="tp-card tp-card-sm"></div>
+            </div>
+          </div>
+          <div class="theme-name">Ocean</div>
+          <div class="theme-desc">Cool blues & deep navy</div>
+          <div class="theme-check">✓</div>
+        </button>
+
+        <!-- Rose -->
+        <button class="theme-card" data-theme="rose" onclick="applyTheme('rose',this)">
+          <div class="theme-preview tp-rose">
+            <div class="tp-sidebar"></div>
+            <div class="tp-main">
+              <div class="tp-bar"></div>
+              <div class="tp-card"></div>
+              <div class="tp-card tp-card-sm"></div>
+            </div>
+          </div>
+          <div class="theme-name">Rose</div>
+          <div class="theme-desc">Soft pink & dusty mauve</div>
+          <div class="theme-check">✓</div>
+        </button>
+
+      </div>
+    </div>
+
+    <!-- ── FONT SIZE ── -->
+    <div class="settings-section">
+      <div class="settings-section-title">Text Size</div>
+      <div class="settings-row">
+        <div class="settings-row-info">
+          <div class="settings-row-label">Interface font size</div>
+          <div class="settings-row-sub">Adjusts the size of text across the app</div>
+        </div>
+        <div class="font-size-btns" id="font-size-btns">
+          <button class="fsize-btn" data-size="small"  onclick="applyFontSize('small',this)">A<span>Small</span></button>
+          <button class="fsize-btn active" data-size="medium" onclick="applyFontSize('medium',this)">A<span>Medium</span></button>
+          <button class="fsize-btn" data-size="large"  onclick="applyFontSize('large',this)">A<span>Large</span></button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── SIDEBAR ── -->
+    <div class="settings-section">
+      <div class="settings-section-title">Sidebar</div>
+      <div class="settings-row">
+        <div class="settings-row-info">
+          <div class="settings-row-label">Compact sidebar</div>
+          <div class="settings-row-sub">Show icons only, hide labels</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggle-compact" onchange="toggleCompactSidebar(this.checked)"/>
+          <span class="toggle-track"><span class="toggle-thumb"></span></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- ── NOTIFICATIONS ── -->
+    <div class="settings-section">
+      <div class="settings-section-title">Notifications</div>
+      <div class="settings-row">
+        <div class="settings-row-info">
+          <div class="settings-row-label">Toast notifications</div>
+          <div class="settings-row-sub">Show pop-up messages after actions</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggle-toasts" checked onchange="toggleToasts(this.checked)"/>
+          <span class="toggle-track"><span class="toggle-thumb"></span></span>
+        </label>
+      </div>
+      <div class="settings-row">
+        <div class="settings-row-info">
+          <div class="settings-row-label">Focus timer sound</div>
+          <div class="settings-row-sub">Play a chime when the session ends</div>
+        </div>
+        <label class="toggle-switch">
+          <input type="checkbox" id="toggle-sound" checked onchange="toggleTimerSound(this.checked)"/>
+          <span class="toggle-track"><span class="toggle-thumb"></span></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- ── DATA ── -->
+    <div class="settings-section">
+      <div class="settings-section-title">Data</div>
+      <div class="settings-row">
+        <div class="settings-row-info">
+          <div class="settings-row-label">Export all data</div>
+          <div class="settings-row-sub">Download a JSON backup of your notes, goals and reminders</div>
+        </div>
+        <button class="settings-btn" onclick="exportData()">Export JSON</button>
+      </div>
+      <div class="settings-row settings-row-danger">
+        <div class="settings-row-info">
+          <div class="settings-row-label">Clear all data</div>
+          <div class="settings-row-sub">Permanently delete everything stored locally</div>
+        </div>
+        <button class="settings-btn settings-btn-danger" onclick="confirmClearData()">Clear data</button>
+      </div>
+    </div>
+
+    <!-- ── ABOUT ── -->
+    <div class="settings-section settings-about">
+      <div class="settings-about-logo">Lifeflow</div>
+      <div class="settings-about-sub">Your Inner Workspace</div>
+      <div class="settings-about-version">v1.0.0 · Built with ♥</div>
+    </div>
+
+  </div>
+</div><!-- /panel-settings -->
+</main><!-- /main -->
+
+
+<!-- ══════════════════════════════════════════
+     MODALS
+══════════════════════════════════════════ -->
+
+<!-- Note modal -->
+<div class="overlay" id="overlay-note">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-head-title" id="note-modal-title">New note</div>
+      <select id="note-type">
+        <option value="idea">💡 Idea</option>
+        <option value="recipe">🍴 Recipe</option>
+        <option value="schedule">📅 Schedule</option>
+        <option value="list">✓ List</option>
+      </select>
+      <input type="text" class="modal-title-input" id="note-title" placeholder="Title..."/>
+    </div>
+    <div class="modal-body">
+      <textarea class="modal-textarea" id="note-body" placeholder="Start writing..."></textarea>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-cancel" onclick="closeNoteModal()">Cancel</button>
+      <button class="btn-save" onclick="saveNote()">Save note</button>
+    </div>
+  </div>
+</div>
+
+<!-- Calendar event modal -->
+<div class="overlay" id="overlay-cal">
+  <div class="modal-sm">
+    <div style="font-family:'DM Serif Display',serif;font-size:20px;color:var(--text-primary);margin-bottom:18px;" id="cal-modal-title">Add event</div>
+    <input type="text"  id="cal-name" placeholder="Event name..."  style="width:100%;font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--text-primary);background:var(--cream);border:1px solid var(--border2);border-radius:10px;padding:11px 14px;outline:none;margin-bottom:10px;"/>
+    <input type="date"  id="cal-date"                              style="width:100%;font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--text-primary);background:var(--cream);border:1px solid var(--border2);border-radius:10px;padding:11px 14px;outline:none;margin-bottom:10px;"/>
+    <input type="time"  id="cal-time"                              style="width:100%;font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--text-primary);background:var(--cream);border:1px solid var(--border2);border-radius:10px;padding:11px 14px;outline:none;margin-bottom:12px;"/>
+    <div style="font-size:11px;color:var(--text-muted);margin-bottom:8px;font-weight:500;">Color</div>
+    <div class="color-row" id="cal-colors"></div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px;border-top:1px solid var(--border);padding-top:16px;">
+      <button class="btn-cancel" onclick="closeCalModal()">Cancel</button>
+      <button class="btn-save"   onclick="saveCalEvent()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Goal modal -->
+<div class="overlay" id="overlay-goal">
+  <div class="modal">
+    <div class="modal-head">
+      <div class="modal-head-title" id="goal-modal-title">New goal</div>
+      <select id="goal-category">
+        <option value="health">🏃 Health &amp; Fitness</option>
+        <option value="learning">📚 Learning</option>
+        <option value="career">💼 Career</option>
+        <option value="personal">✨ Personal</option>
+        <option value="finance">💰 Finance</option>
+        <option value="creative">🎨 Creative</option>
+      </select>
+      <input type="text" class="modal-title-input" id="goal-title" placeholder="Goal title..."/>
+    </div>
+    <div class="modal-body">
+      <textarea class="modal-textarea" id="goal-desc" placeholder="Describe your goal..." style="min-height:100px;margin-bottom:16px;"></textarea>
+      <div style="margin-bottom:16px;">
+        <label style="font-size:12px;color:var(--text-muted);font-weight:500;display:block;margin-bottom:6px;">Deadline</label>
+        <input type="date" id="goal-deadline" style="width:100%;font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--text-primary);background:var(--cream);border:1px solid var(--border2);border-radius:10px;padding:11px 14px;outline:none;"/>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <label style="font-size:12px;color:var(--text-muted);font-weight:500;">Progress</label>
+          <span id="goal-pct-label" style="font-size:13px;font-weight:600;color:var(--accent);">0%</span>
+        </div>
+        <input type="range" id="goal-progress" class="range-input" min="0" max="100" value="0"
+               oninput="document.getElementById('goal-pct-label').textContent=this.value+'%'"/>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-cancel" onclick="closeGoalModal()">Cancel</button>
+      <button class="btn-save"   onclick="saveGoal()">Save goal</button>
+    </div>
+  </div>
+</div>
+
+<!-- Reminder modal -->
+<div class="overlay" id="overlay-reminder">
+  <div class="modal-sm">
+    <div style="font-family:'DM Serif Display',serif;font-size:20px;color:var(--text-primary);margin-bottom:18px;" id="rem-modal-title">New reminder</div>
+    <input type="text"  id="rem-title"    placeholder="Reminder title..." style="width:100%;font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--text-primary);background:var(--cream);border:1px solid var(--border2);border-radius:10px;padding:11px 14px;outline:none;margin-bottom:10px;"/>
+    <input type="date"  id="rem-date"                                      style="width:100%;font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--text-primary);background:var(--cream);border:1px solid var(--border2);border-radius:10px;padding:11px 14px;outline:none;margin-bottom:10px;"/>
+    <input type="time"  id="rem-time"                                      style="width:100%;font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--text-primary);background:var(--cream);border:1px solid var(--border2);border-radius:10px;padding:11px 14px;outline:none;margin-bottom:12px;"/>
+    <div style="margin-bottom:12px;">
+      <label style="font-size:11px;color:var(--text-muted);font-weight:500;margin-bottom:6px;display:block;">Priority</label>
+      <select id="rem-priority" style="width:100%;font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--text-primary);background:var(--cream);border:1px solid var(--border2);border-radius:10px;padding:11px 14px;outline:none;">
+        <option value="low">🟢 Low</option>
+        <option value="medium" selected>🟡 Medium</option>
+        <option value="high">🔴 High</option>
+      </select>
+    </div>
+    <div style="display:flex;gap:10px;justify-content:flex-end;margin-top:16px;border-top:1px solid var(--border);padding-top:16px;">
+      <button class="btn-cancel" onclick="closeRemModal()">Cancel</button>
+      <button class="btn-save"   onclick="saveReminder()">Save</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     TOAST NOTIFICATION
+══════════════════════════════════════════ -->
+<div class="toast" id="toast"></div>
+
+
+<!-- ══════════════════════════════════════════
+     AUTH OVERLAY
+══════════════════════════════════════════ -->
+<div class="overlay open" id="overlay-auth">
+  <div class="auth-card">
+
+    <div class="auth-logo">
+      <div class="auth-logo-name">Lifeflow</div>
+      <div class="auth-logo-sub">Your Inner Workspace</div>
+    </div>
+
+    <!-- Sign-in form -->
+    <form id="form-signin" onsubmit="handleSignIn(event)">
+      <h2 class="auth-heading">Welcome back</h2>
+      <p class="auth-subheading">Sign in to continue to your workspace.</p>
+
+      <label class="auth-label" for="signin-email">Email</label>
+      <input class="auth-input" type="email" id="signin-email" placeholder="you@example.com" autocomplete="email"/>
+
+      <label class="auth-label" for="signin-password">Password</label>
+      <input class="auth-input" type="password" id="signin-password" placeholder="••••••••" autocomplete="current-password"/>
+
+      <button class="auth-btn" type="submit">Sign in</button>
+    </form>
+
+    <!-- Sign-up form (hidden by default) -->
+    <form id="form-signup" style="display:none;" onsubmit="handleSignUp(event)">
+      <h2 class="auth-heading">Create account</h2>
+      <p class="auth-subheading">Start your personal productivity workspace.</p>
+
+      <label class="auth-label" for="signup-name">Display name</label>
+      <input class="auth-input" type="text" id="signup-name" placeholder="Your name" autocomplete="name"/>
+
+      <label class="auth-label" for="signup-email">Email</label>
+      <input class="auth-input" type="email" id="signup-email" placeholder="you@example.com" autocomplete="email"/>
+
+      <label class="auth-label" for="signup-password">Password</label>
+      <input class="auth-input" type="password" id="signup-password" placeholder="At least 6 characters" autocomplete="new-password"/>
+
+      <button class="auth-btn" type="submit">Create account</button>
+    </form>
+
+    <!-- Error message -->
+    <div class="auth-error" id="auth-error" style="display:none;"></div>
+
+    <!-- Toggle link -->
+    <p class="auth-toggle">
+      <span id="auth-toggle-link" onclick="toggleAuthForm()">Don't have an account? <span class="auth-toggle-action">Sign up</span></span>
+    </p>
+
+  </div>
+</div>
+
+
+<!-- ══════════════════════════════════════════
+     FLOATING ACTION BUTTON
+══════════════════════════════════════════ -->
+<div class="fab-menu" id="fab-menu">
+  <div class="fab-item" onclick="openNoteModal();closeFab()">
+    <div class="fab-item-label">New Note</div>
+    <div class="fab-item-btn"><i data-lucide="pencil-line"></i></div>
+  </div>
+  <div class="fab-item" onclick="openGoalModal();closeFab()">
+    <div class="fab-item-label">New Goal</div>
+    <div class="fab-item-btn"><i data-lucide="target"></i></div>
+  </div>
+  <div class="fab-item" onclick="openCalModal(null);closeFab()">
+    <div class="fab-item-label">Add Event</div>
+    <div class="fab-item-btn"><i data-lucide="calendar-plus"></i></div>
+  </div>
+  <div class="fab-item" onclick="openReminderModal();closeFab()">
+    <div class="fab-item-label">Set Reminder</div>
+    <div class="fab-item-btn"><i data-lucide="bell-plus"></i></div>
+  </div>
+</div>
+<button class="fab" id="fab-btn" onclick="toggleFab()" title="Quick add"><i data-lucide="plus"></i></button>
+
+<!-- ══════════════════════════════════════════
+     FIREBASE SDK  (compat layer — exposes global `firebase`)
+══════════════════════════════════════════ -->
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
+<!-- Firebase initializer — sets window._firebaseAuth and window._firebaseDb -->
+<script src="firebase-init.js"></script>
+
+<!-- ══════════════════════════════════════════
+     APP SCRIPT  (loaded last so DOM is ready)
+══════════════════════════════════════════ -->
+<script src="app.js"></script>
+<script src="mobile-init.js"></script>
+<script src="settings.js"></script>
+<script>
+  lucide.createIcons({
+    attrs: {
+      'stroke-width': '1.75',
+      'width': '16',
+      'height': '16'
+    }
+  });
+</script>
+  
+</body>
+</html>
